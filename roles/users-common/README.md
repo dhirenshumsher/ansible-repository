@@ -54,60 +54,60 @@ None
 Example Playbook
 ----------------
 
-Add or modify a user and set up sudo and ssh authorized keys:
+   Add or modify a user and set up sudo and ssh authorized keys:
 
-roles:
-  - role: users-common
-    users_default_shell: /bin/bash
-    users_create_primary_group: true
-    users_enable_sudo: true
-    users_sudo_pkg_name: sudo
-    users_create_homedirs: true
-    users:
-       - name: ansible
-         fullname: MIP ansible user
-         primary_group: ansible
-         groups: ['ansible','wheel']
-         primary_gid: 52000
-         uid: 52000000
-         homedir: /home/ansible
-         profile: |
-           alias ll='ls -lah'
-         ssh_authorized_keys:
-             - "ssh-rsa AAAA---BBB ACB@OSTML022222"
-             - "ssh-rsa AAAA---CCC BAC@OSTML023333"
-         sudo: 'ALL=(ALL) NOPASSWD: ALL'
-         system: false
-
-         - name: bnsible
-          fullname: BIP ansible user
-          primary_group: bnsible
-          groups: ['bnsible','wheel']
-          primary_gid: 62000
-          uid: 62000000
-          homedir: /home/bnsible
-          profile: |
-            alias ll='ls -lah'
-          ssh_authorized_keys:
-              - "ssh-rsa AAAA---BBB ACB@OSTML022222"
-              - "ssh-rsa AAAA---CCC BAC@OSTML023333"
-          sudo: 'ALL=(ALL) NOPASSWD: ALL'
-          system: false
-
-
-Deleting users:
-
-    - hosts: all
       roles:
         - role: users-common
-          users_deleted:
-            - name: ansible
-            - name: bnsible
+          users_default_shell: /bin/bash
+          users_create_primary_group: true
+          users_enable_sudo: true
+          users_sudo_pkg_name: sudo
+          users_create_homedirs: true
+          users:
+             - name: ansible
+               fullname: MIP ansible user
+               primary_group: ansible
+               groups: ['ansible','wheel']
+               primary_gid: 52000
+               uid: 52000000
+               homedir: /home/ansible
+               profile: |
+                 alias ll='ls -lah'
+               ssh_authorized_keys:
+                   - "ssh-rsa AAAA---BBB ACB@OSTML022222"
+                   - "ssh-rsa AAAA---CCC BAC@OSTML023333"
+               sudo: 'ALL=(ALL) NOPASSWD: ALL'
+               system: false
+
+               - name: bnsible
+                fullname: BIP ansible user
+                primary_group: bnsible
+                groups: ['bnsible','wheel']
+                primary_gid: 62000
+                uid: 62000000
+                homedir: /home/bnsible
+                profile: |
+                  alias ll='ls -lah'
+                ssh_authorized_keys:
+                    - "ssh-rsa AAAA---BBB ACB@OSTML022222"
+                    - "ssh-rsa AAAA---CCC BAC@OSTML023333"
+                sudo: 'ALL=(ALL) NOPASSWD: ALL'
+                system: false
+
+
+      Deleting users:
+
+          - hosts: all
+            roles:
+              - role: users-common
+                users_deleted:
+                  - name: ansible
+                  - name: bnsible
 
 License
 -------
-APACHE 2.0
+   APACHE 2.0
 
 Author Information
 ------------------
-dhirenshumsher
+   dhirenshumsher
