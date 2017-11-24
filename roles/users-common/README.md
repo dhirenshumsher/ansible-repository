@@ -1,5 +1,5 @@
 
-MIP Ansible Users Management- users-common
+Ansible Users Management- users-common
 ==================================
 
 **Ansible role used to manage users, groups, alias, ssh authorized keys, sudo and user deprecation.**
