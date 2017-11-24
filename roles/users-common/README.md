@@ -15,20 +15,20 @@ Role Variables
 
 List of variables and default values:
 
-# The default shell used for all users, when left unspecified
-users_default_shell: /bin/bash
+The default shell used for all users, when left unspecified
+ users_default_shell: /bin/bash
 
-# The default action when primary_group is defined but the group does not exist
-users_create_primary_group: true
+The default action when primary_group is defined but the group does not exist
+ users_create_primary_group: true
 
-# If the users role should support sudo or not (see sudo.yml for tasks)
-users_enable_sudo: true
+If the users role should support sudo or not (see sudo.yml for tasks)
+ users_enable_sudo: true
 
-# Default sudo package name, which seems identical across distributions
-users_sudo_pkg_name: sudo
+Default sudo package name, which seems identical across distributions
+ users_sudo_pkg_name: sudo
 
-# Enable to create user home directory
-users_create_homedirs: true
+Enable to create user home directory
+ users_create_homedirs: true
 
 
     # The only mandatory parameter is the name.
