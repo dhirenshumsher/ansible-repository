@@ -1,0 +1,28 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# linux repository
+*.repo
+
+# Playbooks
+provision-users.yml
+
+# Hostnames
+hosts
+
+# SSH Keys
+*.key
+*.cert
+*.pem
+ 

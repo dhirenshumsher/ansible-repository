@@ -1,0 +1,72 @@
+---
+- block:
+  - name: create groups
+    group: name={{ item.primary_group }}
+           gid="{{ item.primary_gid | default(item.uid) | default(omit)}}"
+    when:
+      - item.primary_group is defined
+      - users_create_primary_group
+    with_items: "{{ users }}"
+    no_log: "{{ true if item.passwd is defined else false }}"
+
+
+  - name: setup users
+    user:
+      name: "{{ item.name | mandatory }}"
+      group:
+        "{{ item.primary_group | default(omit)
+        if users_create_primary_group else omit }}"
+      groups: "{{ item.groups | default('') | join(',') }}"
+      uid: "{{item.uid | default(omit)}}"
+      shell: "{{ item.shell | default(users_default_shell) }}"
+      password: "{{ item.passwd | default(omit) }}"
+      comment: "{{ item.fullname | default(omit) }}"
+      home: "{{ item.homedir | default(omit) }}"
+      system: "{{ item.system | default(omit) }}"
+      createhome:
+        "{{ false if item.system is defined and item.system or
+        item.no_create_home is defined and item.no_create_home else omit }}"
+    with_items: "{{ users }}"
+    no_log: "{{ true if item.passwd is defined else false }}"
+
+- name: SSH keys
+  authorized_key:
+    user: "{{item.0.name}}"
+    key: "{{item.1}}"
+    path: "{{ item.0.home | default('/home/' + item.0.name) }}/.ssh/authorized_keys"
+  with_subelements:
+    - "{{users}}"
+    - ssh_authorized_keys
+    - skip_missing: yes
+  tags: ['users','configuration']
+  no_log: "{{ true if item.0.passwd is defined else false }}"
+
+- include: sudo.yml
+  when: users_enable_sudo
+  become: false
+  tags: sudo
+
+  # become: true
+  # tags: users,user
+  # when: users is defined
+
+- name: Setup user profiles
+  blockinfile:
+    block: "{{item.profile}}"
+    dest: "{{ item.homedir | default('/home/' + item.name) }}/.bash_profile"
+    owner: "{{item.name}}"
+    group: "{{item.primary_group | default(item.name if users_create_primary_group else primary_group)}}"
+    mode: 0644
+    create: true
+  when: users_create_homedirs and item.profile is defined
+  with_items: "{{users}}"
+
+- name: delete users
+  user:
+    name: "{{ item.name | mandatory }}"
+    state: absent
+  with_items: "{{ users_deleted }}"
+  become: true
+  no_log: "{{ true if item.passwd is defined else false }}"
+  tags: users,user
+  when: users_deleted is defined
